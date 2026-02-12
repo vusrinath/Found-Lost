@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoxTrack App Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .wireframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .phone-frame {
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: #1a1a1a;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+        
+        .phone-screen {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            height: 650px;
+            position: relative;
+        }
+        
+        .screen-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #000;
+        }
+        
+        /* Navigation Bar */
+        .nav-bar {
+            height: 60px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .nav-button {
+            color: #667eea;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            margin: 15px;
+            padding: 12px 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-icon {
+            color: #999;
+        }
+        
+        .search-input {
+            border: none;
+            background: none;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        /* Content Area */
+        .content {
+            padding: 15px;
+            overflow-y: auto;
+            height: calc(650px - 104px - 60px);
+        }
+        
+        .content-full {
+            padding: 15px;
+            overflow-y: auto;
+            height: calc(650px - 104px);
+        }
+        
+        /* Box Card */
+        .box-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .box-card:hover {
+            border-color: #667eea;
+        }
+        
+        .box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .box-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .box-count {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .box-location {
+            font-size: 14px;
+            color: #667eea;
+            margin-top: 5px;
+        }
+        
+        .box-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        /* QR Code */
+        .qr-container {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border: 3px solid #667eea;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+        
+        .qr-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 15px;
+            color: #333;
+        }
+        
+        /* Item List */
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .item-qty {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .item-photo {
+            width: 50px;
+            height: 50px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-right: 12px;
+        }
+        
+        /* Form Input */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        /* FAB */
+        .fab {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+        }
+        
+        /* Tab Bar */
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-icon {
+            color: #667eea;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-label {
+            color: #667eea;
+        }
+        
+        /* Camera View */
+        .camera-view {
+            background: #000;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .scan-frame {
+            width: 250px;
+            height: 250px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            position: relative;
+        }
+        
+        .scan-corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #667eea;
+        }
+        
+        .scan-corner.tl {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .scan-corner.tr {
+            top: -3px;
+            right: -3px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .scan-corner.bl {
+            bottom: -3px;
+            left: -3px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .scan-corner.br {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        .scan-text {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .empty-text {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .empty-subtext {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 BoxTrack - App Wireframes</h1>
+        
+        <div class="wireframe-grid">
+            <!-- Screen 1: Home / Box List -->
+            <div>
+                <div class="screen-title">1. Home Screen</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-title">My Boxes</div>
+                            <div class="nav-button">⚙️</div>
+                        </div>
+                        <div class="search-bar">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="search-input" placeholder="Search boxes or items...">
+                        </div>
+                        <div class="content">
+                            <div class="stats-container">
+                                <div class="stat-card">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">Total Boxes</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">247</div>
+                                    <div class="stat-label">Total Items</div>
+                                </div>
+                            </div>
+                            
+                            <div class="box-card">
+                                <div class="box-header">
+                                    <div class="box-name">🏠 Kitchen Items</div>
+                                    <div class="box-count">24 items</div>
+                                </div>
+                                <div class="box-location">📍 Garage - Shelf A</div>
+                                <span class="box-tag">Kitchen</span>
+                            </div>
+                            
+                            <div class="box-card">
+                                <div class="box-header">
+                                    <div class="box-name">🎄 Holiday Decorations</div>
+                                    <div class="box-count">18 items</div>
+                                </div>
+                                <div class="box-location">📍 Attic - Right Side</div>
+                                <span class="box-tag">Seasonal</span>
+                            </div>
+                            
+                            <div class="box-card">
+                                <div class="box-header">
+                                    <div class="box-name">👶 Baby Clothes</div>
+                                    <div class="box-count">32 items</div>
+                                </div>
+                                <div class="box-location">📍 Closet - Top Shelf</div>
+                                <span class="box-tag">Clothing</span>
+                            </div>
+                        </div>
+                        <div class="fab">+</div>
+                        <div class="tab-bar">
+                            <div class="tab-item active">
+                                <div class="tab-icon">📦</div>
+                                <div class="tab-label">Boxes</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">📷</div>
+                                <div class="tab-label">Scan</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">📊</div>
+                                <div class="tab-label">Stats</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">👤</div>
+                                <div class="tab-label">Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 2: Create New Box -->
+            <div>
+                <div class="screen-title">2. Create New Box</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">Cancel</div>
+                            <div class="nav-title">New Box</div>
+                            <div class="nav-button" style="opacity: 0.3;">Save</div>
+                        </div>
+                        <div class="content-full">
+                            <div class="form-group">
+                                <label class="form-label">Box Name *</label>
+                                <input type="text" class="form-input" placeholder="e.g., Winter Clothes">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Description (Optional)</label>
+                                <input type="text" class="form-input" placeholder="Add more details...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Location *</label>
+                                <input type="text" class="form-input" placeholder="e.g., Garage - Shelf A">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                                    <span class="box-tag" style="background: #667eea; color: white;">Kitchen</span>
+                                    <span class="box-tag">Seasonal</span>
+                                    <span class="box-tag">Clothing</span>
+                                    <span class="box-tag">Tools</span>
+                                    <span class="box-tag">Books</span>
+                                    <span class="box-tag">Toys</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Box Color</label>
+                                <div style="display: flex; gap: 15px; margin-top: 10px;">
+                                    <div style="width: 40px; height: 40px; background: #667eea; border-radius: 8px; border: 3px solid #333;"></div>
+                                    <div style="width: 40px; height: 40px; background: #f093fb; border-radius: 8px;"></div>
+                                    <div style="width: 40px; height: 40px; background: #4facfe; border-radius: 8px;"></div>
+                                    <div style="width: 40px; height: 40px; background: #43e97b; border-radius: 8px;"></div>
+                                    <div style="width: 40px; height: 40px; background: #fa709a; border-radius: 8px;"></div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary">Create Box & Generate QR Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 3: Box Details with Items -->
+            <div>
+                <div class="screen-title">3. Box Details</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">← Back</div>
+                            <div class="nav-title">Kitchen Items</div>
+                            <div class="nav-button">⋯</div>
+                        </div>
+                        <div class="content-full">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <div>
+                                        <div style="font-size: 14px; color: #999; margin-bottom: 5px;">Location</div>
+                                        <div style="font-size: 16px; font-weight: 600;">📍 Garage - Shelf A</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 14px; color: #999; margin-bottom: 5px;">Items</div>
+                                        <div style="font-size: 16px; font-weight: 600;">24</div>
+                                    </div>
+                                </div>
+                                <button class="btn-secondary" style="margin-top: 15px;">🔲 View QR Code</button>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div style="font-size: 18px; font-weight: 600;">Items in Box</div>
+                                <div style="color: #667eea; font-size: 24px; cursor: pointer;">+</div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Mixing Bowls Set</div>
+                                    <div class="item-qty">Qty: 3</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Kitchen Towels</div>
+                                    <div class="item-qty">Qty: 8</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Measuring Cups</div>
+                                    <div class="item-qty">Qty: 1 set</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Wooden Spoons</div>
+                                    <div class="item-qty">Qty: 5</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Baking Sheets</div>
+                                    <div class="item-qty">Qty: 2</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 4: QR Code View -->
+            <div>
+                <div class="screen-title">4. QR Code Display</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">← Back</div>
+                            <div class="nav-title">QR Code</div>
+                            <div class="nav-button">Share</div>
+                        </div>
+                        <div class="content-full">
+                            <div class="qr-container">
+                                <div style="font-size: 16px; color: #999; margin-bottom: 10px;">Scan this code to view box contents</div>
+                                <div class="qr-code">
+                                    <div style="text-align: center; font-size: 14px; color: #999;">QR Code<br/>Pattern</div>
+                                </div>
+                                <div class="qr-label">Kitchen Items</div>
+                                <div style="font-size: 14px; color: #999; margin-top: 5px;">Box ID: BOX-001</div>
+                                
+                                <button class="btn-primary" style="margin-top: 40px;">🖨️ Print QR Code</button>
+                                <button class="btn-secondary">📤 Share Box Info</button>
+                                
+                                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; text-align: left;">
+                                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">Print Options</div>
+                                    <div style="font-size: 13px; color: #666; line-height: 1.6;">
+                                        • Small (2"x2") - Label size<br/>
+                                        • Medium (4"x4") - Box top<br/>
+                                        • Large (6"x6") - Wall mount
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 5: QR Scanner -->
+            <div>
+                <div class="screen-title">5. Scan QR Code</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="camera-view">
+                            <div class="scan-frame">
+                                <div class="scan-corner tl"></div>
+                                <div class="scan-corner tr"></div>
+                                <div class="scan-corner bl"></div>
+                                <div class="scan-corner br"></div>
+                            </div>
+                            <div class="scan-text">Point camera at QR code</div>
+                        </div>
+                        <div style="position: absolute; top: 20px; left: 20px; color: white; font-size: 30px; cursor: pointer;">✕</div>
+                        <div style="position: absolute; bottom: 90px; left: 0; right: 0; text-align: center;">
+                            <div style="display: inline-block; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px; color: white; font-size: 14px;">
+                                💡 Scan any box QR code to view contents
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 6: Add Item -->
+            <div>
+                <div class="screen-title">6. Add Item to Box</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">Cancel</div>
+                            <div class="nav-title">Add Item</div>
+                            <div class="nav-button">Save</div>
+                        </div>
+                        <div class="content-full">
+                            <div class="form-group">
+                                <label class="form-label">Item Name *</label>
+                                <input type="text" class="form-input" placeholder="e.g., Blue Winter Jacket">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Quantity</label>
+                                <div style="display: flex; gap: 15px; align-items: center;">
+                                    <button style="width: 50px; height: 50px; border: 2px solid #e0e0e0; background: white; border-radius: 10px; font-size: 24px; cursor: pointer;">-</button>
+                                    <input type="text" class="form-input" value="1" style="text-align: center; width: 80px; flex: none;">
+                                    <button style="width: 50px; height: 50px; border: 2px solid #667eea; background: #667eea; color: white; border-radius: 10px; font-size: 24px; cursor: pointer;">+</button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Description (Optional)</label>
+                                <input type="text" class="form-input" placeholder="Color, size, condition...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Photo (Optional)</label>
+                                <div style="display: flex; gap: 15px;">
+                                    <div style="width: 100px; height: 100px; border: 2px dashed #e0e0e0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #ccc; cursor: pointer;">📷</div>
+                                    <div style="width: 100px; height: 100px; background: #f0f0f0; border-radius: 12px;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Value (Optional)</label>
+                                <input type="text" class="form-input" placeholder="$0.00">
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">For insurance purposes</div>
+                            </div>
+                            
+                            <button class="btn-primary">Add Item to Kitchen Items</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 7: Search Results -->
+            <div>
+                <div class="screen-title">7. Search Results</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">← Back</div>
+                            <div class="nav-title">Search</div>
+                            <div style="opacity: 0;"></div>
+                        </div>
+                        <div class="search-bar">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="search-input" value="winter" placeholder="Search boxes or items...">
+                        </div>
+                        <div class="content">
+                            <div style="font-size: 14px; color: #999; margin-bottom: 15px;">Found 8 results for "winter"</div>
+                            
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #667eea;">Boxes (2)</div>
+                            
+                            <div class="box-card">
+                                <div class="box-header">
+                                    <div class="box-name">❄️ Winter Clothes</div>
+                                    <div class="box-count">15 items</div>
+                                </div>
+                                <div class="box-location">📍 Bedroom Closet</div>
+                            </div>
+                            
+                            <div class="box-card">
+                                <div class="box-header">
+                                    <div class="box-name">🏂 Winter Sports Gear</div>
+                                    <div class="box-count">8 items</div>
+                                </div>
+                                <div class="box-location">📍 Garage - Corner</div>
+                            </div>
+                            
+                            <div style="font-size: 16px; font-weight: 600; margin: 20px 0 10px 0; color: #667eea;">Items (6)</div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Blue Winter Jacket</div>
+                                    <div class="item-qty">in Winter Clothes • Qty: 1</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Winter Boots</div>
+                                    <div class="item-qty">in Winter Clothes • Qty: 2</div>
+                                </div>
+                            </div>
+                            
+                            <div class="item-row">
+                                <div class="item-photo"></div>
+                                <div class="item-info">
+                                    <div class="item-name">Winter Gloves</div>
+                                    <div class="item-qty">in Winter Sports Gear • Qty: 3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-bar">
+                            <div class="tab-item">
+                                <div class="tab-icon">📦</div>
+                                <div class="tab-label">Boxes</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">📷</div>
+                                <div class="tab-label">Scan</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">📊</div>
+                                <div class="tab-label">Stats</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">👤</div>
+                                <div class="tab-label">Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 8: Settings -->
+            <div>
+                <div class="screen-title">8. Settings</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 📡 🔋</span>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-button">← Back</div>
+                            <div class="nav-title">Settings</div>
+                            <div style="opacity: 0;"></div>
+                        </div>
+                        <div class="content-full">
+                            <div style="padding: 20px 0;">
+                                <div style="font-size: 14px; font-weight: 600; color: #999; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Account</div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div style="font-size: 16px; color: #333;">☁️ Cloud Backup</div>
+                                        <div style="font-size: 13px; color: #999; margin-top: 3px;">Last backup: 2 hours ago</div>
+                                    </div>
+                                    <div style="color: #667eea;">→</div>
+                                </div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">👥 Family Sharing</div>
+                                    <div style="color: #667eea;">→</div>
+                                </div>
+                                
+                                <div style="font-size: 14px; font-weight: 600; color: #999; margin: 30px 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">App Settings</div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">🌙 Dark Mode</div>
+                                    <div style="width: 50px; height: 30px; background: #667eea; border-radius: 15px; position: relative;">
+                                        <div style="width: 26px; height: 26px; background: white; border-radius: 13px; position: absolute; right: 2px; top: 2px;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">🔔 Notifications</div>
+                                    <div style="color: #667eea;">→</div>
+                                </div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">📏 Measurement Units</div>
+                                    <div style="color: #667eea;">Imperial →</div>
+                                </div>
+                                
+                                <div style="font-size: 14px; font-weight: 600; color: #999; margin: 30px 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">Data</div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">📤 Export Data</div>
+                                    <div style="color: #667eea;">→</div>
+                                </div>
+                                
+                                <div style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 16px; color: #333;">📥 Import Data</div>
+                                    <div style="color: #667eea;">→</div>
+                                </div>
+                                
+                                <button class="btn-secondary" style="margin-top: 40px; color: #d32f2f; border-color: #d32f2f;">🗑️ Delete All Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: white; border-radius: 20px; padding: 40px; margin-top: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+            <h2 style="margin-bottom: 30px; color: #333;">📱 User Flow Summary</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">Primary Flow</h3>
+                    <ol style="line-height: 2; color: #666;">
+                        <li>User opens app to Home screen</li>
+                        <li>Taps "+" FAB to create new box</li>
+                        <li>Fills in box details and category</li>
+                        <li>App generates unique QR code</li>
+                        <li>User prints and attaches QR to physical box</li>
+                        <li>User adds items to digital box</li>
+                        <li>Items are searchable across all boxes</li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">Search Flow</h3>
+                    <ol style="line-height: 2; color: #666;">
+                        <li>User needs to find an item</li>
+                        <li>Types item name in search bar</li>
+                        <li>Results show both matching boxes and items</li>
+                        <li>Taps result to view box location</li>
+                        <li>User can navigate to physical box</li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">QR Scan Flow</h3>
+                    <ol style="line-height: 2; color: #666;">
+                        <li>User finds physical box</li>
+                        <li>Opens app and taps Scan tab</li>
+                        <li>Points camera at QR code</li>
+                        <li>App instantly opens box details</li>
+                        <li>User can view all items inside</li>
+                        <li>Can add/edit items on the spot</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 12px;">
+                <h3 style="color: #333; margin-bottom: 15px;">🎨 Design Notes</h3>
+                <ul style="line-height: 2; color: #666;">
+                    <li><strong>Color Scheme:</strong> Purple gradient (#667eea to #764ba2) for modern, premium feel</li>
+                    <li><strong>iOS Design:</strong> Following Apple's Human Interface Guidelines with rounded corners, SF Symbols style icons</li>
+                    <li><strong>Tab Navigation:</strong> Bottom tabs for easy thumb access on large phones</li>
+                    <li><strong>FAB Button:</strong> Prominent floating action button for quick box creation</li>
+                    <li><strong>Card-Based:</strong> Box cards provide visual hierarchy and are easy to scan</li>
+                    <li><strong>Stats Dashboard:</strong> Quick overview of storage situation at a glance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
