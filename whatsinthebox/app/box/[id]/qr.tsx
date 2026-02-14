@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Alert, Share, Clipboard, Platform }
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import * as MediaLibrary from 'expo-media-library';
+import * as Print from 'expo-print';
 import { captureRef } from 'react-native-view-shot';
 import { NavBar, QRCodeDisplay, Button } from '@/components';
 import { useBoxContext } from '@/context/BoxContext';
@@ -17,6 +18,62 @@ export default function BoxQRScreen() {
   const box = id ? getBoxById(id) : undefined;
 
   const deepLink = box ? Linking.createURL(`/box/${box.id}`) : '';
+
+  const handlePrintQR = async () => {
+    if (!box) return;
+    try {
+      const html = `
+        <html>
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <style>
+              @page {
+                margin: 0.5in;
+                size: auto;
+              }
+              html, body { 
+                margin: 0;
+                padding: 0;
+                height: auto;
+              }
+              body { 
+                font-family: Arial, sans-serif;
+                padding: 20px;
+              }
+              h1 { 
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+              }
+              .info {
+                margin: 10px 0;
+                font-size: 16px;
+                color: #666;
+              }
+              .label {
+                font-weight: bold;
+                color: #333;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${box.name}</h1>
+            <div class="info"><span class="label">Box ID:</span> ${box.qrCodeId}</div>
+            <div class="info"><span class="label">Location:</span> ${box.location}</div>
+            <div class="info"><span class="label">Category:</span> ${box.category}</div>
+            <div class="info"><span class="label">Deep Link:</span> ${deepLink}</div>
+          </body>
+        </html>
+      `;
+      
+      await Print.printAsync({ 
+        html,
+        printerUrl: undefined,
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Failed to print box details');
+    }
+  };
 
   const handleShareQR = async () => {
     if (!box || !qrRef.current) return;
@@ -115,20 +172,11 @@ export default function BoxQRScreen() {
           style={styles.button}
         />
         <Button
-          title="🔗 Copy Deep Link"
-          onPress={handleCopyLink}
+          title="🖨️ Print Box Details"
+          onPress={handlePrintQR}
           variant="secondary"
           style={styles.button}
         />
-        <Button
-          title="📋 Share Box Details"
-          onPress={handleShareInfo}
-          variant="secondary"
-        />
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Deep Link</Text>
-          <Text style={styles.infoText} numberOfLines={2}>{deepLink}</Text>
-        </View>
       </ScrollView>
     </View>
   );
