@@ -3,7 +3,6 @@ import { View, Text, ScrollView, StyleSheet, Alert, Share, Clipboard, Platform }
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import * as MediaLibrary from 'expo-media-library';
-import * as FileSystem from 'expo-file-system';
 import { captureRef } from 'react-native-view-shot';
 import { NavBar, QRCodeDisplay, Button } from '@/components';
 import { useBoxContext } from '@/context/BoxContext';
