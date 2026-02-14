@@ -22,11 +22,35 @@ export default function CreateBoxScreen() {
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState<BoxCategory>(DEFAULT_CATEGORY);
   const [color, setColor] = useState<BoxColor>(DEFAULT_COLOR);
+  const [nameError, setNameError] = useState('');
+  const [showErrors, setShowErrors] = useState(false);
 
-  const canSave = name.trim().length > 0 && location.trim().length > 0;
+  const validateName = (text: string) => {
+    if (text.trim().length < 3) {
+      setNameError('Minimum 3 characters required');
+      return false;
+    }
+    if (text.length > 20) {
+      setNameError('Maximum 20 characters allowed');
+      return false;
+    }
+    setNameError('');
+    return true;
+  };
+
+  const handleNameChange = (text: string) => {
+    setName(text);
+    validateName(text);
+  };
+
+  const canSave = name.trim().length >= 3 && !nameError && location.trim().length > 0;
 
   const handleSave = () => {
-    if (!canSave) return;
+    setShowErrors(true);
+    const isNameValid = validateName(name);
+    
+    if (!isNameValid || !canSave) return;
+    
     const box = addBox({
       name: name.trim(),
       description: description.trim() || undefined,
@@ -58,9 +82,11 @@ export default function CreateBoxScreen() {
           label="Box Name"
           required
           value={name}
-          onChangeText={setName}
+          onChangeText={handleNameChange}
           placeholder="e.g., Winter Clothes"
+          maxLength={20}
         />
+        {showErrors && nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
         <FormInput
           label="Description (Optional)"
           value={description}
@@ -105,4 +131,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   createButton: { marginTop: 20 },
+  errorText: {
+    color: '#ff3b30',
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 16,
+  },
 });
