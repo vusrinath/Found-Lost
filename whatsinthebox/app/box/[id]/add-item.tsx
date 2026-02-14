@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   NavBar,
@@ -21,11 +21,62 @@ export default function AddItemScreen() {
   const [description, setDescription] = useState('');
   const [value, setValue] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [showErrors, setShowErrors] = useState(false);
 
-  const canSave = name.trim().length > 0 && box;
+  const validateName = (text: string) => {
+    if (!text.trim()) {
+      setNameError('Item name is required');
+      return false;
+    }
+    if (text.length > 20) {
+      setNameError('Maximum 20 characters allowed');
+      return false;
+    }
+    if (!/^[a-zA-Z0-9\s]+$/.test(text)) {
+      setNameError('No special characters allowed');
+      return false;
+    }
+    setNameError('');
+    return true;
+  };
+
+  const validateDescription = (text: string) => {
+    const wordCount = text.trim().split(/\s+/).filter(w => w).length;
+    if (wordCount > 100) {
+      setDescriptionError('Maximum 100 words allowed');
+      return false;
+    }
+    setDescriptionError('');
+    return true;
+  };
+
+  const handleNameChange = (text: string) => {
+    setName(text);
+    validateName(text);
+  };
+
+  const handleDescriptionChange = (text: string) => {
+    setDescription(text);
+    validateDescription(text);
+  };
+
+  const handleValueChange = (text: string) => {
+    setValue(text);
+  };
+
+  const canSave = name.trim().length > 0 && !nameError && !descriptionError && box;
 
   const handleSave = () => {
-    if (!canSave || !box) return;
+    if (!box) return;
+    
+    setShowErrors(true);
+    const isNameValid = validateName(name);
+    const isDescValid = validateDescription(description);
+    
+    if (!isNameValid || !isDescValid) return;
+    
     try {
       addItem({
         boxId: box.id,
@@ -60,7 +111,11 @@ export default function AddItemScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <NavBar
         title="Add Item"
         leftAction={{ label: 'Cancel', onPress: handleCancel }}
@@ -76,9 +131,11 @@ export default function AddItemScreen() {
           label="Item Name"
           required
           value={name}
-          onChangeText={setName}
+          onChangeText={handleNameChange}
           placeholder="e.g., Blue Winter Jacket"
+          maxLength={20}
         />
+        {showErrors && nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
         <View style={styles.group}>
           <Text style={styles.label}>Quantity</Text>
           <QuantityStepper value={quantity} onChange={setQuantity} />
@@ -86,9 +143,10 @@ export default function AddItemScreen() {
         <FormInput
           label="Description (Optional)"
           value={description}
-          onChangeText={setDescription}
+          onChangeText={handleDescriptionChange}
           placeholder="Color, size, condition..."
         />
+        {showErrors && descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
         <View style={styles.group}>
           <Text style={styles.label}>Photo (Optional)</Text>
           <PhotoPicker
@@ -99,9 +157,10 @@ export default function AddItemScreen() {
         <FormInput
           label="Value (Optional)"
           value={value}
-          onChangeText={setValue}
+          onChangeText={handleValueChange}
           placeholder="$0.00"
           helperText="For insurance purposes"
+          keyboardType="numeric"
         />
         <Button
           title={`Add Item to ${box.name}`}
@@ -110,14 +169,14 @@ export default function AddItemScreen() {
           style={styles.submitButton}
         />
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   scroll: { flex: 1 },
-  content: { padding: 16, paddingBottom: 40 },
+  content: { padding: 16, paddingBottom: 200 },
   group: { marginBottom: 20 },
   label: {
     fontSize: 14,
@@ -126,4 +185,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   submitButton: { marginTop: 20 },
+  errorText: {
+    color: '#ff3b30',
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 16,
+  },
 });

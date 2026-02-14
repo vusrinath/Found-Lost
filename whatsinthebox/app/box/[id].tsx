@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   NavBar,
@@ -72,14 +72,17 @@ export default function BoxDetailScreen() {
       <NavBar
         title={box.name}
         leftAction={{ label: '← Back', onPress: () => router.back() }}
-        rightAction={{ label: '⋯', onPress: showBoxOptions }}
+        rightAction={{ label: '✏️ Edit', onPress: showBoxOptions }}
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <View style={styles.summaryCard}>
           <View style={styles.summaryRow}>
             <View>
               <Text style={styles.summaryLabel}>Location</Text>
-              <Text style={styles.summaryValue}>📍 {box.location}</Text>
+              <Text style={styles.summaryValue}> 
+                <Image source={require('@/assets/images/location.png')} style={styles.locationIcon}/>
+                {box.location}
+                </Text>
             </View>
             <View style={styles.summaryRight}>
               <Text style={styles.summaryLabel}>Items</Text>
@@ -130,6 +133,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 12,
   },
+  locationIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 4,
+  },
   summaryRight: { alignItems: 'flex-end' },
   summaryLabel: { fontSize: 12, color: '#999', marginBottom: 4 },
   summaryValue: { fontSize: 16, fontWeight: '600', color: '#333' },
@@ -141,5 +149,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   itemsTitle: { fontSize: 18, fontWeight: '600', color: '#333' },
-  addIcon: { fontSize: 24, color: '#007AFF', fontWeight: '300' },
+  addIcon: { fontSize: 34, color: '#007AFF', fontWeight: '500' },
 });

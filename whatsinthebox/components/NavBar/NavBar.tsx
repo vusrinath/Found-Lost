@@ -93,9 +93,10 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 16,
+    fontWeight: '600',
     color: colors.primary,
   },
   buttonDisabled: {
-    opacity: 0.3,
+    opacity: 0.7,
   },
 });
