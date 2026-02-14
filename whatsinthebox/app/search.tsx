@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#667eea',
+    color: '#007AFF',
     marginBottom: 10,
   },
   sectionTitleItems: {

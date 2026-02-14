@@ -105,5 +105,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   itemsTitle: { fontSize: 18, fontWeight: '600', color: '#333' },
-  addIcon: { fontSize: 24, color: '#667eea', fontWeight: '300' },
+  addIcon: { fontSize: 24, color: '#007AFF', fontWeight: '300' },
 });

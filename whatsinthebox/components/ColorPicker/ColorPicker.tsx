@@ -4,12 +4,12 @@ import type { BoxColor } from '@/types';
 import { colors } from '@/theme/colors';
 
 const COLORS: BoxColor[] = [
-  '#667eea',
-  '#f093fb',
-  '#4facfe',
-  '#43e97b',
-  '#fa709a',
-  '#ffa726',
+  '#E8F4FD',  // Light blue
+  '#E6F7ED',  // Light mint
+  '#FEF3E2',  // Light cream
+  '#FCE8F0',  // Light blush
+  '#F3E8FD',  // Light lavender
+  '#F0F0F2',  // Light gray
 ];
 
 interface ColorPickerProps {
@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
   },
   selected: {
     borderWidth: 3,
-    borderColor: colors.text,
+    borderColor: colors.textMuted,
   },
 });

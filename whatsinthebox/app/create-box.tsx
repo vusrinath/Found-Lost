@@ -11,7 +11,7 @@ import {
 import { useBoxContext } from '@/context/BoxContext';
 import type { BoxCategory, BoxColor } from '@/types';
 
-const DEFAULT_COLOR: BoxColor = '#667eea';
+const DEFAULT_COLOR: BoxColor = '#E8F4FD';
 const DEFAULT_CATEGORY: BoxCategory = 'Other';
 
 export default function CreateBoxScreen() {

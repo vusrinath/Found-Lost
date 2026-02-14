@@ -3,6 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '@/theme/colors';
 import type { Box } from '@/types';
 
+const LIGHT_BOX_COLORS = [
+  '#E8F4FD', '#E6F7ED', '#FEF3E2', '#FCE8F0', '#F3E8FD', '#F0F0F2',
+] as const;
+
+function getBoxBackgroundColor(boxColor: string): string {
+  return LIGHT_BOX_COLORS.includes(boxColor as typeof LIGHT_BOX_COLORS[number])
+    ? boxColor
+    : '#F0F0F2'; // Fallback for legacy colors
+}
+
 interface BoxCardProps {
   box: Box;
   itemCount: number;
@@ -15,7 +25,7 @@ export function BoxCard({ box, itemCount, onPress }: BoxCardProps) {
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, { backgroundColor: getBoxBackgroundColor(box.color) }]}
       onPress={onPress}
       activeOpacity={0.7}
     >
@@ -29,7 +39,7 @@ export function BoxCard({ box, itemCount, onPress }: BoxCardProps) {
         📍 {box.location}
       </Text>
       <View style={styles.tagContainer}>
-        <View style={[styles.tag, { borderLeftColor: box.color }]}>
+        <View style={[styles.tag, { backgroundColor: colors.white }]}>
           <Text style={styles.tagText}>{box.category}</Text>
         </View>
       </View>
@@ -39,8 +49,7 @@ export function BoxCard({ box, itemCount, onPress }: BoxCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.white,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 12,
     padding: 16,
@@ -75,10 +84,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    backgroundColor: colors.backgroundTertiary,
     borderRadius: 12,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.primary,
+    opacity: 0.95,
   },
   tagText: {
     fontSize: 12,
