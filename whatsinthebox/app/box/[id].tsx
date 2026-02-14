@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   NavBar,
@@ -11,11 +11,42 @@ import { useBoxContext } from '@/context/BoxContext';
 export default function BoxDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { getBoxById, getItemsByBoxId, getBoxItemQuantity } = useBoxContext();
+  const { getBoxById, getItemsByBoxId, getBoxItemQuantity, deleteBox } = useBoxContext();
 
   const box = id ? getBoxById(id) : undefined;
   const items = box ? getItemsByBoxId(box.id) : [];
   const itemCount = box ? getBoxItemQuantity(box.id) : 0;
+
+  const showBoxOptions = () => {
+    if (!box) return;
+    const boxId = box.id;
+    const boxName = box.name;
+    Alert.alert(boxName, 'Choose an action', [
+      { text: 'Edit / Rename', onPress: () => router.push(`/box/${boxId}/edit`) },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          Alert.alert(
+            'Delete Box',
+            `Are you sure you want to delete "${boxName}"? All items inside will also be deleted.`,
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: () => {
+                  deleteBox(boxId);
+                  router.back();
+                },
+              },
+            ]
+          );
+        },
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  };
 
   if (!box) {
     return (
@@ -36,7 +67,7 @@ export default function BoxDetailScreen() {
       <NavBar
         title={box.name}
         leftAction={{ label: '← Back', onPress: () => router.back() }}
-        rightAction={{ label: '⋯', onPress: () => {} }}
+        rightAction={{ label: '⋯', onPress: showBoxOptions }}
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <View style={styles.summaryCard}>

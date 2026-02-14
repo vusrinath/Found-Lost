@@ -19,6 +19,7 @@ export default function RootLayout() {
         <Stack.Screen name="create-box" />
         <Stack.Screen name="search" />
         <Stack.Screen name="box/[id]" />
+        <Stack.Screen name="box/[id]/edit" />
         <Stack.Screen name="box/[id]/qr" />
         <Stack.Screen name="box/[id]/add-item" />
         <Stack.Screen name="box/[id]/item/[itemId]" />
