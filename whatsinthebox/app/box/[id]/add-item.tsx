@@ -26,15 +26,19 @@ export default function AddItemScreen() {
 
   const handleSave = () => {
     if (!canSave || !box) return;
-    addItem({
-      boxId: box.id,
-      name: name.trim(),
-      quantity,
-      description: description.trim() || undefined,
-      value: value ? parseFloat(value.replace(/[^0-9.]/g, '')) : undefined,
-      photoUri: photoUri || undefined,
-    });
-    router.back();
+    try {
+      addItem({
+        boxId: box.id,
+        name: name.trim(),
+        quantity,
+        description: description.trim() || undefined,
+        value: value ? parseFloat(value.replace(/[^0-9.]/g, '')) : undefined,
+        photoUri: photoUri || undefined,
+      });
+      router.back();
+    } catch (error) {
+      console.error('Failed to add item:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -42,7 +46,17 @@ export default function AddItemScreen() {
   };
 
   if (!box) {
-    return null;
+    return (
+      <View style={styles.container}>
+        <NavBar
+          title="Add Item"
+          leftAction={{ label: 'Cancel', onPress: () => router.back() }}
+        />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Box not found</Text>
+        </View>
+      </View>
+    );
   }
 
   return (

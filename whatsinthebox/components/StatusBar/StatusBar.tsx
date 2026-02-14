@@ -9,13 +9,15 @@ interface StatusBarProps {
 
 export function StatusBar({ backgroundColor = colors.backgroundSecondary }: StatusBarProps) {
   const insets = useSafeAreaInsets();
+  const containerStyle = [styles.container, { paddingTop: insets.top, backgroundColor }];
+  const statusIcons = '📶 📡 🔋';
 
   return (
     <>
       <RNStatusBar barStyle="dark-content" backgroundColor={backgroundColor} />
-      <View style={[styles.container, { paddingTop: insets.top, backgroundColor }]}>
+      <View style={containerStyle}>
         <Text style={styles.time}>9:41</Text>
-        <Text style={styles.icons}>📶 📡 🔋</Text>
+        <Text style={styles.icons}>{statusIcons}</Text>
       </View>
     </>
   );

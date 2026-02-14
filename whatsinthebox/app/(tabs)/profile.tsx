@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NavBar, SettingsRow, Button, TabBar } from '@/components';
+import { useBoxContext } from '@/context/BoxContext';
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { boxes, items, deleteBox, deleteItem } = useBoxContext();
 
   const handleDeleteAll = () => {
     Alert.alert(
@@ -12,7 +14,18 @@ export default function ProfileScreen() {
       'This will permanently delete all boxes and items. Are you sure?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => {} },
+        { 
+          text: 'Delete', 
+          style: 'destructive', 
+          onPress: async () => {
+            try {
+              [...boxes].forEach(box => deleteBox(box.id));
+              Alert.alert('Success', 'All data has been deleted');
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete data. Please try again.');
+            }
+          }
+        },
       ]
     );
   };

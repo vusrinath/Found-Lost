@@ -30,8 +30,24 @@ export function SettingsRow({
   value,
   onValueChange,
 }: SettingsRowProps) {
-  const isToggle = typeof value === 'boolean' && onValueChange;
-  const isPressable = onPress && !isToggle;
+  const isToggle = typeof value === 'boolean' && typeof onValueChange === 'function';
+  const isPressable = typeof onPress === 'function' && !isToggle;
+
+  const handlePress = () => {
+    try {
+      onPress?.();
+    } catch (error) {
+      console.error('Error in SettingsRow onPress:', error);
+    }
+  };
+
+  const handleValueChange = (newValue: boolean) => {
+    try {
+      onValueChange?.(newValue);
+    } catch (error) {
+      console.error('Error in SettingsRow onValueChange:', error);
+    }
+  };
 
   const content = (
     <>
@@ -51,7 +67,7 @@ export function SettingsRow({
         {isToggle ? (
           <Switch
             value={value}
-            onValueChange={onValueChange}
+            onValueChange={handleValueChange}
             trackColor={{ false: colors.border, true: colors.primary }}
             thumbColor={colors.white}
           />
@@ -66,7 +82,7 @@ export function SettingsRow({
     return (
       <TouchableOpacity
         style={styles.row}
-        onPress={onPress}
+        onPress={handlePress}
         activeOpacity={0.7}
       >
         {content}

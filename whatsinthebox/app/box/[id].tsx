@@ -9,10 +9,11 @@ import {
 import { useBoxContext } from '@/context/BoxContext';
 
 export default function BoxDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const params = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { getBoxById, getItemsByBoxId, getBoxItemQuantity, deleteBox } = useBoxContext();
 
+  const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : undefined;
   const box = id ? getBoxById(id) : undefined;
   const items = box ? getItemsByBoxId(box.id) : [];
   const itemCount = box ? getBoxItemQuantity(box.id) : 0;
@@ -36,8 +37,12 @@ export default function BoxDetailScreen() {
                 text: 'Delete',
                 style: 'destructive',
                 onPress: () => {
-                  deleteBox(boxId);
-                  router.back();
+                  try {
+                    deleteBox(boxId);
+                    router.back();
+                  } catch (error) {
+                    Alert.alert('Error', 'Failed to delete box. Please try again.');
+                  }
                 },
               },
             ]

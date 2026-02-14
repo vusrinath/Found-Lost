@@ -14,7 +14,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuidv4 } from 'uuid';
 import type { Box, Item, BoxCategory, BoxColor } from '@/types';
 
-const STORAGE_KEY = '@boxtrack_data';
+const getStorageKey = () => {
+  const key = process.env.EXPO_PUBLIC_STORAGE_KEY;
+  if (!key) {
+    throw new Error('EXPO_PUBLIC_STORAGE_KEY environment variable is required');
+  }
+  return key;
+};
 
 interface BoxContextValue {
   boxes: Box[];
@@ -45,7 +51,7 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
 
   const loadData = useCallback(async () => {
     try {
-      const raw = await AsyncStorage.getItem(STORAGE_KEY);
+      const raw = await AsyncStorage.getItem(getStorageKey());
       if (raw) {
         const { boxes: b, items: i } = JSON.parse(raw);
         setBoxes(b || []);
@@ -61,7 +67,7 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
   const saveData = useCallback(async (b: Box[], i: Item[]) => {
     try {
       await AsyncStorage.setItem(
-        STORAGE_KEY,
+        getStorageKey(),
         JSON.stringify({ boxes: b, items: i })
       );
     } catch (e) {
@@ -207,35 +213,32 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
       const q = query.toLowerCase().trim();
       if (!q) return { boxes: [], items: [] };
 
-      // Items matching by name or description
-      const matchingItems = items.filter((i) => {
-        const nameMatch = i.name.toLowerCase().includes(q);
-        const descMatch = i.description?.toLowerCase().includes(q);
-        return nameMatch || descMatch;
-      });
-
-      // Boxes matching by name, location, or category
-      const boxesByField = boxes.filter(
-        (b) =>
-          b.name.toLowerCase().includes(q) ||
-          b.location.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q)
+      const matchingItems = items.filter((i) =>
+        i.name.toLowerCase().includes(q) ||
+        i.description?.toLowerCase().includes(q)
       );
 
-      // Boxes that contain matching items (include parent boxes)
-      const boxIdsWithMatchingItems = new Set(
-        matchingItems.map((i) => i.boxId)
-      );
-      const boxesByItems = boxes.filter((b) => boxIdsWithMatchingItems.has(b.id));
+      const boxIdsWithMatchingItems = new Set(matchingItems.map((i) => i.boxId));
+      const matchingBoxesMap = new Map<string, Box>();
 
-      // Merge and deduplicate boxes
-      const matchingBoxes = Array.from(
-        new Map(
-          [...boxesByField, ...boxesByItems].map((b) => [b.id, b])
-        ).values()
-      );
+      for (const b of boxes) {
+        if (boxIdsWithMatchingItems.has(b.id)) {
+          matchingBoxesMap.set(b.id, b);
+        } else {
+          const lowerName = b.name.toLowerCase();
+          const lowerLocation = b.location.toLowerCase();
+          const lowerCategory = b.category.toLowerCase();
+          if (
+            lowerName.includes(q) ||
+            lowerLocation.includes(q) ||
+            lowerCategory.includes(q)
+          ) {
+            matchingBoxesMap.set(b.id, b);
+          }
+        }
+      }
 
-      return { boxes: matchingBoxes, items: matchingItems };
+      return { boxes: Array.from(matchingBoxesMap.values()), items: matchingItems };
     },
     [boxes, items]
   );

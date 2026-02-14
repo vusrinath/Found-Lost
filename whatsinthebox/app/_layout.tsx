@@ -10,11 +10,11 @@ export default function RootLayout() {
       <BoxProvider>
         <StatusBar style="dark" />
         <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: '#fff' },
-        }}
-      >
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: '#fff' },
+          }}
+        >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="create-box" />
         <Stack.Screen name="search" />

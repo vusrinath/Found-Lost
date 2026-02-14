@@ -17,50 +17,6 @@ interface ButtonProps {
   loading?: boolean;
   style?: object;
 }
-
-export function Button({
-  title,
-  onPress,
-  variant = 'primary',
-  disabled = false,
-  loading = false,
-  style,
-}: ButtonProps) {
-  const variantStyles = {
-    primary: styles.primary,
-    secondary: styles.secondary,
-    danger: styles.danger,
-  };
-
-  const textStyles = {
-    primary: styles.primaryText,
-    secondary: styles.secondaryText,
-    danger: styles.dangerText,
-  };
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.button,
-        variantStyles[variant],
-        disabled && styles.disabled,
-        style,
-      ]}
-      onPress={onPress}
-      activeOpacity={0.7}
-      disabled={disabled || loading}
-    >
-      {loading ? (
-        <ActivityIndicator
-          color={variant === 'primary' || variant === 'danger' ? colors.white : colors.primary}
-        />
-      ) : (
-        <Text style={[styles.text, textStyles[variant]]}>{title}</Text>
-      )}
-    </TouchableOpacity>
-  );
-}
-
 const styles = StyleSheet.create({
   button: {
     width: '100%',
@@ -99,3 +55,48 @@ const styles = StyleSheet.create({
     color: colors.error,
   },
 });
+
+
+const variantStyles = {
+  primary: styles.primary,
+  secondary: styles.secondary,
+  danger: styles.danger,
+};
+
+const textStyles = {
+  primary: styles.primaryText,
+  secondary: styles.secondaryText,
+  danger: styles.dangerText,
+};
+
+export function Button({
+  title,
+  onPress,
+  variant = 'primary',
+  disabled = false,
+  loading = false,
+  style,
+}: ButtonProps) {
+  const activityIndicatorColor = variant === 'secondary' ? colors.primary : colors.white;
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.button,
+        variantStyles[variant],
+        disabled && styles.disabled,
+        style,
+      ]}
+      onPress={onPress}
+      activeOpacity={0.7}
+      disabled={disabled || loading}
+    >
+      {loading ? (
+        <ActivityIndicator color={activityIndicatorColor} />
+      ) : (
+        <Text style={[styles.text, textStyles[variant]]}>{title}</Text>
+      )}
+    </TouchableOpacity>
+  );
+}
+

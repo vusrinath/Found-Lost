@@ -5,14 +5,37 @@ import { NavBar, QRCodeDisplay, Button } from '@/components';
 import { useBoxContext } from '@/context/BoxContext';
 
 export default function BoxQRScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const params = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { getBoxById } = useBoxContext();
 
+  const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : undefined;
   const box = id ? getBoxById(id) : undefined;
 
+  const handleShare = () => {
+    // TODO: Implement share functionality
+  };
+
+  const handlePrint = () => {
+    // TODO: Implement print functionality
+  };
+
+  const handleShareInfo = () => {
+    // TODO: Implement share box info functionality
+  };
+
   if (!box) {
-    return null;
+    return (
+      <View style={styles.container}>
+        <NavBar
+          title="QR Code"
+          leftAction={{ label: '← Back', onPress: () => router.back() }}
+        />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Box not found</Text>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -20,7 +43,7 @@ export default function BoxQRScreen() {
       <NavBar
         title="QR Code"
         leftAction={{ label: '← Back', onPress: () => router.back() }}
-        rightAction={{ label: 'Share', onPress: () => {} }}
+        rightAction={{ label: 'Share', onPress: handleShare }}
       />
       <ScrollView
         style={styles.scroll}
@@ -34,12 +57,12 @@ export default function BoxQRScreen() {
         />
         <Button
           title="🖨️ Print QR Code"
-          onPress={() => {}}
+          onPress={handlePrint}
           style={styles.button}
         />
         <Button
           title="📤 Share Box Info"
-          onPress={() => {}}
+          onPress={handleShareInfo}
           variant="secondary"
         />
         <View style={styles.options}>
