@@ -77,7 +77,7 @@ export default function HomeScreen() {
 
         {filteredBoxes.length === 0 ? (
           <EmptyState
-            icon="📦"
+            icon="📦"  
             title={searchQuery ? 'No boxes found' : 'No boxes yet'}
             subtitle={
               searchQuery
