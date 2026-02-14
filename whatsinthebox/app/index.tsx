@@ -1,15 +1,8 @@
-import { Text, View } from "react-native";
+import { Redirect } from 'expo-router';
 
+/**
+ * Root index - redirects to the main BoxTrack app (tabs/home)
+ */
 export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Hello world!</Text>
-    </View>
-  );
+  return <Redirect href="/(tabs)" />;
 }
