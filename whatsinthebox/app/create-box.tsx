@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
   NavBar,
@@ -21,6 +21,8 @@ export default function CreateBoxScreen() {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState<BoxCategory>(DEFAULT_CATEGORY);
+  const [customCategory, setCustomCategory] = useState('');
+  const [showCustomCategory, setShowCustomCategory] = useState(false);
   const [color, setColor] = useState<BoxColor>(DEFAULT_COLOR);
   const [nameError, setNameError] = useState('');
   const [showErrors, setShowErrors] = useState(false);
@@ -43,6 +45,16 @@ export default function CreateBoxScreen() {
     validateName(text);
   };
 
+  const handleCategorySelect = (selectedCategory: BoxCategory) => {
+    if (selectedCategory === 'Other') {
+      setShowCustomCategory(true);
+    } else {
+      setShowCustomCategory(false);
+      setCustomCategory('');
+    }
+    setCategory(selectedCategory);
+  };
+
   const canSave = name.trim().length >= 3 && !nameError && location.trim().length > 0;
 
   const handleSave = () => {
@@ -55,7 +67,7 @@ export default function CreateBoxScreen() {
       name: name.trim(),
       description: description.trim() || undefined,
       location: location.trim(),
-      category,
+      category: customCategory.trim() || category,
       color,
     });
     router.replace(`/box/${box.id}/qr`);
@@ -66,7 +78,11 @@ export default function CreateBoxScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <NavBar
         title="New Box"
         leftAction={{ label: 'Cancel', onPress: handleCancel }}
@@ -102,7 +118,16 @@ export default function CreateBoxScreen() {
         />
         <View style={styles.group}>
           <Text style={styles.label}>Category</Text>
-          <CategoryChips selected={category} onSelect={setCategory} />
+          <CategoryChips selected={category} onSelect={handleCategorySelect} />
+          {showCustomCategory && (
+            <FormInput
+              label=""
+              value={customCategory}
+              onChangeText={setCustomCategory}
+              placeholder="Enter custom category"
+              maxLength={20}
+            />
+          )}
         </View>
         <View style={styles.group}>
           <Text style={styles.label}>Box Color</Text>
@@ -115,14 +140,14 @@ export default function CreateBoxScreen() {
           style={styles.createButton}
         />
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   scroll: { flex: 1 },
-  content: { padding: 16, paddingBottom: 40 },
+  content: { padding: 16, paddingBottom: 200 },
   group: { marginBottom: 20 },
   label: {
     fontSize: 14,
