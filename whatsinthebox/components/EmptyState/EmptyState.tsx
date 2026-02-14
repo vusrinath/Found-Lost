@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '@/theme/colors';
 
 interface EmptyStateProps {
-  icon?: string;
+  icon?: string | React.ReactNode;
   title: string;
   subtitle?: string;
 }
@@ -15,7 +15,11 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>{icon}</Text>
+      {typeof icon === 'string' ? (
+        <Text style={styles.icon}>{icon}</Text>
+      ) : (
+        <View style={styles.iconContainer}>{icon}</View>
+      )}
       <Text style={styles.title}>{title}</Text>
       {subtitle ? (
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -34,6 +38,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 80,
+    marginBottom: 20,
+  },
+  iconContainer: {
     marginBottom: 20,
   },
   title: {

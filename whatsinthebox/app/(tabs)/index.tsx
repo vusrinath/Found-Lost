@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   useWindowDimensions,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
@@ -77,7 +78,7 @@ export default function HomeScreen() {
 
         {filteredBoxes.length === 0 ? (
           <EmptyState
-            icon="📦"  
+            icon={<Image source={require('@/assets/images/box.png')} style={{ width: 80, height: 80 }} />}
             title={searchQuery ? 'No boxes found' : 'No boxes yet'}
             subtitle={
               searchQuery

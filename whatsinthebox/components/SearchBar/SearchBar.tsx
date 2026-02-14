@@ -20,9 +20,11 @@ export function SearchBar({
   placeholder = 'Search boxes or items...',
   ...rest
 }: SearchBarProps) {
+  const searchIcon = '🔍';
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>🔍</Text>
+      <Text style={styles.icon}>{searchIcon}</Text>
       <TextInput
         style={styles.input}
         value={value}
@@ -50,6 +52,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 16,
+    color: colors.textMuted,
   },
   input: {
     flex: 1,

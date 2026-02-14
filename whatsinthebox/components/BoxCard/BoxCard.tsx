@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { colors } from '@/theme/colors';
 import type { Box } from '@/types';
 
@@ -35,9 +35,12 @@ export function BoxCard({ box, itemCount, onPress }: BoxCardProps) {
         </Text>
         <Text style={styles.count}>{itemLabel}</Text>
       </View>
-      <Text style={styles.location} numberOfLines={1}>
-        📍 {box.location}
-      </Text>
+      <View style={styles.locationContainer}>
+        <Image source={require('@/assets/images/location.png')} style={styles.locationIcon} />
+        <Text style={styles.location} numberOfLines={1}>
+          {box.location}
+        </Text>
+      </View>
       <View style={styles.tagContainer}>
         <View style={[styles.tag, { backgroundColor: colors.white }]}>
           <Text style={styles.tagText}>{box.category}</Text>
@@ -75,7 +78,17 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 14,
     color: colors.primary,
+    flex: 1,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 4,
+    gap: 4,
+  },
+  locationIcon: {
+    width: 14,
+    height: 14,
   },
   tagContainer: {
     marginTop: 8,

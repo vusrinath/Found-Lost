@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 
@@ -7,16 +7,15 @@ export type TabId = 'boxes' | 'scan' | 'stats' | 'profile';
 
 interface TabItem {
   id: TabId;
-  icon: string;
+  icon: string | React.ReactNode;
   label: string;
 }
 
 const TABS: TabItem[] = [
-  { id: 'boxes', icon: '📦', label: 'Boxes' },
-  { id: 'scan', icon: '📷', label: 'Scan' },
-  { id: 'stats', icon: '📊', label: 'Stats' },
-  { id: 'profile', icon: '👤', label: 'Profile' },
-
+  { id: 'boxes', icon: <Image source={require('@/assets/images/box.png')} style={{ width: 45, height: 30 }} />, label: 'Boxes' },
+  { id: 'scan', icon: <Image source={require('@/assets/images/scan.png')} style={{ width: 50, height: 30 }} />, label: 'Scan' },
+  { id: 'stats', icon: <Image source={require('@/assets/images/stats.png')} style={{ width: 50, height: 30 }} />, label: 'Stats' },
+  { id: 'profile', icon: <Image source={require('@/assets/images/profile.png')} style={{ width: 50, height: 40 }} />, label: 'Profile' },
 ];
 
 interface TabBarProps {
@@ -36,14 +35,20 @@ export function TabBar({ activeTab, onTabChange }: TabBarProps) {
           onPress={() => onTabChange(tab.id)}
           activeOpacity={0.7}
         >
-          <Text
-            style={[
-              styles.icon,
-              activeTab === tab.id && styles.iconActive,
-            ]}
-          >
-            {tab.icon}
-          </Text>
+          {typeof tab.icon === 'string' ? (
+            <Text
+              style={[
+                styles.icon,
+                activeTab === tab.id && styles.iconActive,
+              ]}
+            >
+              {tab.icon}
+            </Text>
+          ) : (
+            <View style={[styles.iconContainer, activeTab === tab.id && styles.iconActive]}>
+              {tab.icon}
+            </View>
+          )}
           <Text
             style={[
               styles.label,
@@ -78,8 +83,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: colors.textMuted,
   },
+  iconContainer: {
+    opacity: 0.5,
+  },
   iconActive: {
     color: colors.primary,
+    opacity: 1,
   },
   label: {
     fontSize: 11,

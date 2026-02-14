@@ -8,7 +8,6 @@ interface StatsCardProps {
 }
 
 export function StatsCard({ value, label }: StatsCardProps) {
-  // Use simple colored view - expo-linear-gradient may need to be installed
   return (
     <View style={styles.container}>
       <View style={styles.gradient}>
