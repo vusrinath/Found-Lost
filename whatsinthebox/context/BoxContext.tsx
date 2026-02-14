@@ -200,15 +200,35 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
     (query: string) => {
       const q = query.toLowerCase().trim();
       if (!q) return { boxes: [], items: [] };
-      const matchingBoxes = boxes.filter(
+
+      // Items matching by name or description
+      const matchingItems = items.filter((i) => {
+        const nameMatch = i.name.toLowerCase().includes(q);
+        const descMatch = i.description?.toLowerCase().includes(q);
+        return nameMatch || descMatch;
+      });
+
+      // Boxes matching by name, location, or category
+      const boxesByField = boxes.filter(
         (b) =>
           b.name.toLowerCase().includes(q) ||
           b.location.toLowerCase().includes(q) ||
           b.category.toLowerCase().includes(q)
       );
-      const matchingItems = items.filter((i) =>
-        i.name.toLowerCase().includes(q)
+
+      // Boxes that contain matching items (include parent boxes)
+      const boxIdsWithMatchingItems = new Set(
+        matchingItems.map((i) => i.boxId)
       );
+      const boxesByItems = boxes.filter((b) => boxIdsWithMatchingItems.has(b.id));
+
+      // Merge and deduplicate boxes
+      const matchingBoxes = Array.from(
+        new Map(
+          [...boxesByField, ...boxesByItems].map((b) => [b.id, b])
+        ).values()
+      );
+
       return { boxes: matchingBoxes, items: matchingItems };
     },
     [boxes, items]

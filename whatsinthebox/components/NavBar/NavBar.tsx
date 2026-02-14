@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 
 interface NavBarProps {
@@ -21,9 +22,11 @@ export function NavBar({
   rightAction,
   rightDisabled = false,
 }: NavBarProps) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      <View style={styles.side}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.side, styles.sideLeft]}>
         {leftAction ? (
           <TouchableOpacity onPress={leftAction.onPress} activeOpacity={0.7}>
             <Text style={styles.button}>{leftAction.label}</Text>
@@ -35,7 +38,7 @@ export function NavBar({
       <Text style={styles.title} numberOfLines={1}>
         {title}
       </Text>
-      <View style={styles.side}>
+      <View style={[styles.side, styles.sideRight]}>
         {rightAction ? (
           <TouchableOpacity
             onPress={rightAction.onPress}
@@ -61,17 +64,25 @@ export function NavBar({
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
+    minHeight: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    paddingBottom: 12,
     backgroundColor: colors.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
   side: {
     minWidth: 80,
+    justifyContent: 'center',
+  },
+  sideLeft: {
+    alignItems: 'flex-start',
+  },
+  sideRight: {
+    alignItems: 'flex-end',
   },
   title: {
     flex: 1,

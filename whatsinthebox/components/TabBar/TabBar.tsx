@@ -16,6 +16,7 @@ const TABS: TabItem[] = [
   { id: 'scan', icon: '📷', label: 'Scan' },
   { id: 'stats', icon: '📊', label: 'Stats' },
   { id: 'profile', icon: '👤', label: 'Profile' },
+
 ];
 
 interface TabBarProps {
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 70,
+    height: 100,
     backgroundColor: colors.white,
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   icon: {
-    fontSize: 24,
+    fontSize: 30,
     color: colors.textMuted,
   },
   iconActive: {
