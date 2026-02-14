@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NavBar, SettingsRow, Button, TabBar } from '@/components';
@@ -7,6 +7,40 @@ import { useBoxContext } from '@/context/BoxContext';
 export default function ProfileScreen() {
   const router = useRouter();
   const { boxes, items, deleteBox, deleteItem } = useBoxContext();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  const handleCloudBackup = () => {
+    Alert.alert(
+      'Cloud Backup',
+      'Backup your data to the cloud?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Backup Now',
+          onPress: () => {
+            Alert.alert('Success', 'Data backed up successfully');
+          }
+        }
+      ]
+    );
+  };
+
+  const handleNotifications = () => {
+    Alert.alert(
+      'Notifications',
+      'Enable notifications for reminders and updates?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: notificationsEnabled ? 'Disable' : 'Enable',
+          onPress: () => {
+            setNotificationsEnabled(!notificationsEnabled);
+            Alert.alert('Success', `Notifications ${!notificationsEnabled ? 'enabled' : 'disabled'}`);
+          }
+        }
+      ]
+    );
+  };
 
   const handleDeleteAll = () => {
     Alert.alert(
@@ -42,12 +76,12 @@ export default function ProfileScreen() {
           icon="☁️"
           title="Cloud Backup"
           subtitle="Last backup: 2 hours ago"
-          onPress={() => {}}
+          onPress={handleCloudBackup}
         />
         <SettingsRow
           icon="👥"
           title="Family Sharing"
-          onPress={() => {}}
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
         />
 
         <Text style={styles.section}>APP SETTINGS</Text>
@@ -60,25 +94,19 @@ export default function ProfileScreen() {
         <SettingsRow
           icon="🔔"
           title="Notifications"
-          onPress={() => {}}
-        />
-        <SettingsRow
-          icon="📏"
-          title="Measurement Units"
-          rightText="Imperial"
-          onPress={() => {}}
+          onPress={handleNotifications}
         />
 
         <Text style={styles.section}>DATA</Text>
         <SettingsRow
           icon="📤"
           title="Export Data"
-          onPress={() => {}}
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
         />
         <SettingsRow
           icon="📥"
           title="Import Data"
-          onPress={() => {}}
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
         />
 
         <Button
