@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.whatsinthebox"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,14 +20,38 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.whatsinthebox"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",["expo-camera",{"cameraPermission":"Allow BoxTrack to access your camera to scan QR codes."}],["expo-image-picker",{"photosPermission":"Allow BoxTrack to access your photos to add item images."}],
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow BoxTrack to access your camera to scan QR codes."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow BoxTrack to access your photos to add item images."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow BoxTrack to save QR codes to your photo library.",
+          "savePhotosPermission": "Allow BoxTrack to save QR codes to your photo library."
+        }
+      ],
       [
         "expo-splash-screen",
         {

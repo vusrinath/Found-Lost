@@ -3,8 +3,28 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { BoxProvider } from '@/context/BoxContext';
+import * as Linking from 'expo-linking';
+import { useEffect } from 'react';
 
 export default function RootLayout() {
+  useEffect(() => {
+    const handleDeepLink = (event: { url: string }) => {
+      const { path } = Linking.parse(event.url);
+      console.log('Deep link:', path);
+    };
+
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        const { path } = Linking.parse(url);
+        console.log('Initial URL:', path);
+      }
+    });
+
+    return () => subscription.remove();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <BoxProvider>
