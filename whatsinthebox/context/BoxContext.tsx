@@ -28,6 +28,7 @@ interface BoxContextValue {
   updateItem: (id: string, updates: Partial<Item>) => void;
   deleteItem: (id: string) => void;
   getItemsByBoxId: (boxId: string) => Item[];
+  getItemById: (id: string) => Item | undefined;
   getItemCount: (boxId: string) => number;
   getBoxItemQuantity: (boxId: string) => number;
   getTotalItemCount: () => number;
@@ -179,6 +180,11 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
     [items]
   );
 
+  const getItemById = useCallback(
+    (id: string) => items.find((i) => i.id === id),
+    [items]
+  );
+
   const getItemCount = useCallback(
     (boxId: string) => items.filter((i) => i.boxId === boxId).length,
     [items]
@@ -246,6 +252,7 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
     updateItem,
     deleteItem,
     getItemsByBoxId,
+    getItemById,
     getItemCount,
     getBoxItemQuantity,
     getTotalItemCount,

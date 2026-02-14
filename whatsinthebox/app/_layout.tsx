@@ -21,6 +21,7 @@ export default function RootLayout() {
         <Stack.Screen name="box/[id]" />
         <Stack.Screen name="box/[id]/qr" />
         <Stack.Screen name="box/[id]/add-item" />
+        <Stack.Screen name="box/[id]/item/[itemId]" />
         <Stack.Screen name="scan-modal" options={{ presentation: 'modal' }} />
       </Stack>
       </BoxProvider>

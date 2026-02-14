@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Alert,
+} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   NavBar,
@@ -10,24 +16,35 @@ import {
 } from '@/components';
 import { useBoxContext } from '@/context/BoxContext';
 
-export default function AddItemScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+export default function EditItemScreen() {
+  const { id, itemId } = useLocalSearchParams<{ id: string; itemId: string }>();
   const router = useRouter();
-  const { getBoxById, addItem } = useBoxContext();
+  const { getBoxById, getItemById, updateItem, deleteItem } = useBoxContext();
 
   const box = id ? getBoxById(id) : undefined;
+  const item = itemId ? getItemById(itemId) : undefined;
+
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
   const [value, setValue] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
-  const canSave = name.trim().length > 0 && box;
+  useEffect(() => {
+    if (item) {
+      setName(item.name);
+      setQuantity(item.quantity);
+      setDescription(item.description || '');
+      setValue(item.value ? String(item.value) : '');
+      setPhotoUri(item.photoUri || null);
+    }
+  }, [item]);
+
+  const canSave = name.trim().length > 0 && item;
 
   const handleSave = () => {
-    if (!canSave || !box) return;
-    addItem({
-      boxId: box.id,
+    if (!canSave || !item) return;
+    updateItem(item.id, {
       name: name.trim(),
       quantity,
       description: description.trim() || undefined,
@@ -37,19 +54,35 @@ export default function AddItemScreen() {
     router.back();
   };
 
-  const handleCancel = () => {
-    router.back();
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Item',
+      `Are you sure you want to delete "${item?.name}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            if (item) {
+              deleteItem(item.id);
+              router.back();
+            }
+          },
+        },
+      ]
+    );
   };
 
-  if (!box) {
+  if (!box || !item || item.boxId !== box.id) {
     return null;
   }
 
   return (
     <View style={styles.container}>
       <NavBar
-        title="Add Item"
-        leftAction={{ label: 'Cancel', onPress: handleCancel }}
+        title="Edit Item"
+        leftAction={{ label: 'Cancel', onPress: () => router.back() }}
         rightAction={{ label: 'Save', onPress: handleSave }}
         rightDisabled={!canSave}
       />
@@ -76,7 +109,7 @@ export default function AddItemScreen() {
           placeholder="Color, size, condition..."
         />
         <View style={styles.group}>
-          <Text style={styles.label}>Photo (Optional)</Text>
+          <Text style={styles.label}>Photo</Text>
           <PhotoPicker
             imageUri={photoUri}
             onImageSelected={setPhotoUri}
@@ -90,10 +123,16 @@ export default function AddItemScreen() {
           helperText="For insurance purposes"
         />
         <Button
-          title={`Add Item to ${box.name}`}
+          title="Save Changes"
           onPress={handleSave}
           disabled={!canSave}
           style={styles.submitButton}
+        />
+        <Button
+          title="🗑️ Delete Item"
+          onPress={handleDelete}
+          variant="danger"
+          style={styles.deleteButton}
         />
       </ScrollView>
     </View>
@@ -112,4 +151,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   submitButton: { marginTop: 20 },
+  deleteButton: { marginTop: 16 },
 });

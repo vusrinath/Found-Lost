@@ -66,7 +66,11 @@ export default function BoxDetailScreen() {
         </View>
 
         {items.map((item) => (
-          <ItemRow key={item.id} item={item} />
+          <ItemRow
+            key={item.id}
+            item={item}
+            onPress={() => router.push(`/box/${box.id}/item/${item.id}`)}
+          />
         ))}
       </ScrollView>
     </View>

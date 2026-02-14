@@ -26,7 +26,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",["expo-camera",{"cameraPermission":"Allow BoxTrack to access your camera to scan QR codes."}],
+      "expo-router",["expo-camera",{"cameraPermission":"Allow BoxTrack to access your camera to scan QR codes."}],["expo-image-picker",{"photosPermission":"Allow BoxTrack to access your photos to add item images."}],
       [
         "expo-splash-screen",
         {
