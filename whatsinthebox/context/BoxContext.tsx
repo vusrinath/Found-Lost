@@ -13,6 +13,10 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuidv4 } from 'uuid';
 import type { Box, Item, BoxCategory, BoxColor } from '@/types';
+import { Alert } from 'react-native';
+
+const MAX_BOXES = 20;
+const MAX_ITEMS_PER_BOX = 20;
 
 const getStorageKey = () => {
   const key = process.env.EXPO_PUBLIC_STORAGE_KEY;
@@ -89,6 +93,13 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
     (
       box: Omit<Box, 'id' | 'qrCodeId' | 'createdAt' | 'updatedAt'>
     ): Box => {
+      if (boxes.length >= MAX_BOXES) {
+        Alert.alert(
+          'Limit Reached',
+          `You can only create up to ${MAX_BOXES} boxes in the free version. Upgrade to Pro for unlimited boxes.`
+        );
+        throw new Error('Box limit reached');
+      }
       const now = new Date().toISOString();
       const id = uuidv4();
       const qrCodeId = `BOX-${id.slice(0, 8).toUpperCase()}`;
@@ -102,7 +113,7 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
       setBoxes((prev) => [...prev, newBox]);
       return newBox;
     },
-    []
+    [boxes.length]
   );
 
   const updateBox = useCallback((id: string, updates: Partial<Box>) => {
@@ -138,6 +149,14 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
 
   const addItem = useCallback(
     (item: Omit<Item, 'id' | 'createdAt' | 'updatedAt'>): Item => {
+      const boxItemCount = items.filter((i) => i.boxId === item.boxId).length;
+      if (boxItemCount >= MAX_ITEMS_PER_BOX) {
+        Alert.alert(
+          'Limit Reached',
+          `You can only add up to ${MAX_ITEMS_PER_BOX} items per box in the free version. Upgrade to Pro for unlimited items.`
+        );
+        throw new Error('Item limit reached');
+      }
       const now = new Date().toISOString();
       const id = uuidv4();
       const newItem: Item = {
@@ -154,7 +173,7 @@ export function BoxProvider({ children }: { children: React.ReactNode }) {
       );
       return newItem;
     },
-    []
+    [items]
   );
 
   const updateItem = useCallback((id: string, updates: Partial<Item>) => {
