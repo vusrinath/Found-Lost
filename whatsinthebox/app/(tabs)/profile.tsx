@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { NavBar, SettingsRow, Button, TabBar } from '@/components';
+import { NavBar, SettingsRow, Button, TabBar } from '@/components'; 
 import { useBoxContext } from '@/context/BoxContext';
 
 export default function ProfileScreen() {
@@ -100,13 +100,15 @@ export default function ProfileScreen() {
           subtitle={`Last backup: ${backupText}`}
           onPress={handleCloudBackup}
         />
-        <SettingsRow
-          icon="👥"
-          title="Family Sharing"
-          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
-        />
 
-        <Text style={styles.section}>APP SETTINGS</Text>
+       <SettingsRow
+          icon="🔔"
+          title="Notifications"
+          onPress={handleNotifications}
+        /> 
+        
+        {/* Dark Toggle TODO next release */}
+        {/* <Text style={styles.section}>APP SETTINGS</Text>
         <SettingsRow
           icon="🌙"
           title="Dark Mode"
@@ -117,7 +119,7 @@ export default function ProfileScreen() {
           icon="🔔"
           title="Notifications"
           onPress={handleNotifications}
-        />
+        /> */}
 
         <Text style={styles.section}>DATA</Text>
         <SettingsRow
@@ -128,6 +130,11 @@ export default function ProfileScreen() {
         <SettingsRow
           icon="📥"
           title="Import Data"
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
+        />
+        <SettingsRow
+          icon="👥"
+          title="Family Sharing"
           onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
         />
 

@@ -56,7 +56,6 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <NavBar
         title="My Boxes"
-        rightAction={{ label: '⚙️', onPress: () => router.push('/(tabs)/profile') }}
       />
       <SearchBar
         value={searchQuery}

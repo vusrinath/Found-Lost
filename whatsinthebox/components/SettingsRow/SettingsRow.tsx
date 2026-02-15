@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Switch,
   StyleSheet,
+  Image,
 } from 'react-native';
 import { colors } from '@/theme/colors';
 
@@ -68,11 +69,12 @@ export function SettingsRow({
           <Switch
             value={value}
             onValueChange={handleValueChange}
-            trackColor={{ false: colors.border, true: colors.primary }}
-            thumbColor={colors.white}
+            trackColor={{ false: '#d1d1d6', true: '#34C759' }}
+            thumbColor='#ffffff'
+            ios_backgroundColor='#d1d1d6'
           />
         ) : showArrow && isPressable ? (
-          <Text style={styles.arrow}>→</Text>
+          <Image source={require('@/assets/images/rightArrow.jpeg')} style={styles.arrow} resizeMode="cover"/>
         ) : null}
       </View>
     </>
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   arrow: {
-    fontSize: 16,
-    color: colors.primary,
+    width: 15,
+    height: 15,
   },
 });
