@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { NavBar, SettingsRow, Button, TabBar } from '@/components';
@@ -8,6 +8,27 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { boxes, items, deleteBox, deleteItem } = useBoxContext();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [lastBackup, setLastBackup] = useState<Date | null>(null);
+  const [backupText, setBackupText] = useState('Never');
+
+  useEffect(() => {
+    if (!lastBackup) return;
+    const updateBackupText = () => {
+      const now = Date.now();
+      const diff = now - lastBackup.getTime();
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (minutes < 1) setBackupText('Just now');
+      else if (minutes < 60) setBackupText(`${minutes} minute${minutes > 1 ? 's' : ''} ago`);
+      else if (hours < 24) setBackupText(`${hours} hour${hours > 1 ? 's' : ''} ago`);
+      else setBackupText(`${days} day${days > 1 ? 's' : ''} ago`);
+    };
+    updateBackupText();
+    const interval = setInterval(updateBackupText, 60000);
+    return () => clearInterval(interval);
+  }, [lastBackup]);
 
   const handleCloudBackup = () => {
     Alert.alert(
@@ -18,6 +39,7 @@ export default function ProfileScreen() {
         {
           text: 'Backup Now',
           onPress: () => {
+            setLastBackup(new Date());
             Alert.alert('Success', 'Data backed up successfully');
           }
         }
@@ -75,7 +97,7 @@ export default function ProfileScreen() {
         <SettingsRow
           icon="☁️"
           title="Cloud Backup"
-          subtitle="Last backup: 2 hours ago"
+          subtitle={`Last backup: ${backupText}`}
           onPress={handleCloudBackup}
         />
         <SettingsRow
