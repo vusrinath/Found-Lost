@@ -20,58 +20,39 @@ export default function BoxQRScreen() {
   const deepLink = box ? Linking.createURL(`/box/${box.id}`) : '';
 
   const handlePrintQR = async () => {
-    if (!box) return;
+    if (!box || !qrRef.current) return;
     try {
+      const uri = await captureRef(qrRef, {
+        format: 'png',
+        quality: 1,
+      });
+      
       const html = `
         <html>
           <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <style>
-              @page {
-                margin: 0.5in;
-                size: auto;
-              }
-              html, body { 
-                margin: 0;
-                padding: 0;
-                height: auto;
-              }
+              @page { margin: 0.5in; size: auto; }
               body { 
                 font-family: Arial, sans-serif;
+                text-align: center;
                 padding: 20px;
               }
-              h1 { 
-                font-size: 24px;
-                margin-bottom: 20px;
-                color: #333;
-              }
-              .info {
-                margin: 10px 0;
-                font-size: 16px;
-                color: #666;
-              }
-              .label {
-                font-weight: bold;
-                color: #333;
-              }
+              h1 { font-size: 24px; margin-bottom: 20px; }
+              img { width: 300px; height: 300px; }
             </style>
           </head>
           <body>
             <h1>${box.name}</h1>
-            <div class="info"><span class="label">Box ID:</span> ${box.qrCodeId}</div>
-            <div class="info"><span class="label">Location:</span> ${box.location}</div>
-            <div class="info"><span class="label">Category:</span> ${box.category}</div>
-            <div class="info"><span class="label">Deep Link:</span> ${deepLink}</div>
+            <img src="${uri}" />
+            <p>Box ID: ${box.qrCodeId}</p>
           </body>
         </html>
       `;
       
-      await Print.printAsync({ 
-        html,
-        printerUrl: undefined,
-      });
+      await Print.printAsync({ html });
     } catch (error) {
-      Alert.alert('Error', 'Failed to print box details');
+      Alert.alert('Error', 'Failed to print QR code');
     }
   };
 
@@ -152,7 +133,6 @@ export default function BoxQRScreen() {
       <NavBar
         title="QR Code"
         leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
-        rightAction={{ label: 'Share', onPress: handleShare }}
       />
       <ScrollView
         style={styles.scroll}
@@ -172,7 +152,7 @@ export default function BoxQRScreen() {
           style={styles.button}
         />
         <Button
-          title="🖨️ Print Box Details"
+          title="🖨️ Print QR Code"
           onPress={handlePrintQR}
           variant="secondary"
           style={styles.button}
