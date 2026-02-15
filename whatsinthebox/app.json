@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "whatsinthebox",
-    "slug": "whatsinthebox",
+    "name": "theboxscan",
+    "slug": "theboxscan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "whatsinthebox",
+    "scheme": "theboxscan",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.whatsinthebox"
+      "bundleIdentifier": "com.anonymous.theboxscan"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +25,7 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.anonymous.whatsinthebox"
+      "package": "com.anonymous.theboxscan"
     },
     "web": {
       "output": "static",
