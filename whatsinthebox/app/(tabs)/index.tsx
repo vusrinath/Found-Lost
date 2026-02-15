@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   useWindowDimensions,
   Image,
 } from 'react-native';
@@ -47,9 +45,10 @@ export default function HomeScreen() {
     }
   };
 
-  const filteredBoxes = searchQuery.trim()
-    ? search(searchQuery).boxes
-    : boxes;
+  const filteredBoxes = useMemo(
+    () => (searchQuery.trim() ? search(searchQuery).boxes : boxes),
+    [searchQuery, boxes, search]
+  );
 
   const maxContentWidth = width > 768 ? Math.min(width * 0.7, 600) : width;
 
@@ -72,13 +71,12 @@ export default function HomeScreen() {
       >
         <View style={styles.statsRow}>
           <StatsCard value={boxes.length} label="Total Boxes" />
-          <View style={styles.statSpacer} />
           <StatsCard value={getTotalItemCount()} label="Total Items" />
         </View>
 
         {filteredBoxes.length === 0 ? (
           <EmptyState
-            icon={<Image source={require('@/assets/images/box.png')} style={{ width: 80, height: 80 }} />}
+            icon={<Image source={require('@/assets/images/box.png')} style={styles.emptyIcon} />}
             title={searchQuery ? 'No boxes found' : 'No boxes yet'}
             subtitle={
               searchQuery
@@ -124,7 +122,8 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 20,
   },
-  statSpacer: {
-    width: 12,
+  emptyIcon: {
+    width: 80,
+    height: 80,
   },
 });
