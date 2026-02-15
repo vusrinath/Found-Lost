@@ -22,7 +22,7 @@ export default function BoxQRScreen() {
   const handlePrintQR = async () => {
     if (!box || !qrRef.current) return;
     try {
-      const uri = await captureRef(qrRef, {
+      const uri = await captureRef(qrRef.current, {
         format: 'png',
         quality: 1,
       });
@@ -59,7 +59,7 @@ export default function BoxQRScreen() {
   const handleShareQR = async () => {
     if (!box || !qrRef.current) return;
     try {
-      const uri = await captureRef(qrRef, {
+      const uri = await captureRef(qrRef.current, {
         format: 'png',
         quality: 1,
       });
