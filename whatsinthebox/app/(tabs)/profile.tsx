@@ -68,7 +68,7 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <NavBar
         title="Settings"
-        leftAction={{ label: '← Back', onPress: () => router.back() }}
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <Text style={styles.section}>ACCOUNT</Text>

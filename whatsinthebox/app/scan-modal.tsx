@@ -13,12 +13,12 @@ export default function ScanModalScreen() {
     if (box) {
       router.replace(`/box/${box.id}`);
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   };
 
   const handleClose = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   return (

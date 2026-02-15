@@ -39,7 +39,7 @@ export default function BoxDetailScreen() {
                 onPress: () => {
                   try {
                     deleteBox(boxId);
-                    router.back();
+                    router.canGoBack() ? router.back() : router.replace('/(tabs)');
                   } catch (error) {
                     Alert.alert('Error', 'Failed to delete box. Please try again.');
                   }
@@ -58,7 +58,7 @@ export default function BoxDetailScreen() {
       <View style={styles.container}>
         <NavBar
           title="Box"
-          leftAction={{ label: '← Back', onPress: () => router.back() }}
+          leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         />
         <View style={styles.centered}>
           <Text>Box not found</Text>
@@ -71,7 +71,7 @@ export default function BoxDetailScreen() {
     <View style={styles.container}>
       <NavBar
         title={box.name}
-        leftAction={{ label: '← Back', onPress: () => router.back() }}
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         rightAction={{ label: '✏️ Edit', onPress: showBoxOptions }}
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>

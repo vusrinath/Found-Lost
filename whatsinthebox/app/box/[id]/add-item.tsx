@@ -86,14 +86,14 @@ export default function AddItemScreen() {
         value: value ? parseFloat(value.replace(/[^0-9.]/g, '')) : undefined,
         photoUri: photoUri || undefined,
       });
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } catch (error) {
       console.error('Failed to add item:', error);
     }
   };
 
   const handleCancel = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   if (!box) {
@@ -101,7 +101,7 @@ export default function AddItemScreen() {
       <View style={styles.container}>
         <NavBar
           title="Add Item"
-          leftAction={{ label: 'Cancel', onPress: () => router.back() }}
+          leftAction={{ label: 'Cancel', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Box not found</Text>

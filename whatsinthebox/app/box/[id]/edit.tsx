@@ -45,11 +45,11 @@ export default function EditBoxScreen() {
       category,
       color,
     });
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleCancel = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   if (!box) {

@@ -74,7 +74,7 @@ export default function CreateBoxScreen() {
   };
 
   const handleCancel = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   return (

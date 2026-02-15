@@ -5,9 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { BoxProvider } from '@/context/BoxContext';
 import * as Linking from 'expo-linking';
 import { useEffect } from 'react';
+import { LogBox } from 'react-native';
 
 export default function RootLayout() {
   useEffect(() => {
+    LogBox.ignoreLogs(["The action 'GO_BACK' was not handled by any navigator"]);
+    
     const handleDeepLink = (event: { url: string }) => {
       const { path } = Linking.parse(event.url);
       console.log('Deep link:', path);

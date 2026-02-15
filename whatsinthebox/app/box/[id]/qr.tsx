@@ -138,7 +138,7 @@ export default function BoxQRScreen() {
       <View style={styles.container}>
         <NavBar
           title="QR Code"
-          leftAction={{ label: '← Back', onPress: () => router.back() }}
+          leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Box not found</Text>
@@ -151,7 +151,7 @@ export default function BoxQRScreen() {
     <View style={styles.container}>
       <NavBar
         title="QR Code"
-        leftAction={{ label: '← Back', onPress: () => router.back() }}
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         rightAction={{ label: 'Share', onPress: handleShare }}
       />
       <ScrollView

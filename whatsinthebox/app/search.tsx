@@ -20,7 +20,7 @@ export default function SearchScreen() {
     <View style={styles.container}>
       <NavBar
         title="Search"
-        leftAction={{ label: '← Back', onPress: () => router.back() }}
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
       />
       <SearchBar
         value={query}

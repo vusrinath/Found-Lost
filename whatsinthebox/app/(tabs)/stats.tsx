@@ -16,7 +16,7 @@ export default function StatsScreen() {
     <View style={styles.container}>
       <NavBar
         title="Stats"
-        leftAction={{ label: '← Back', onPress: () => router.back() }}
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
       />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <View style={styles.statsGrid}>

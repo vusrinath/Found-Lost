@@ -51,7 +51,7 @@ export default function EditItemScreen() {
       value: value ? parseFloat(value.replace(/[^0-9.]/g, '')) : undefined,
       photoUri: photoUri || undefined,
     });
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleDelete = () => {
@@ -66,7 +66,7 @@ export default function EditItemScreen() {
           onPress: () => {
             if (item) {
               deleteItem(item.id);
-              router.back();
+              router.canGoBack() ? router.back() : router.replace('/(tabs)');
             }
           },
         },
@@ -82,7 +82,7 @@ export default function EditItemScreen() {
     <View style={styles.container}>
       <NavBar
         title="Edit Item"
-        leftAction={{ label: 'Cancel', onPress: () => router.back() }}
+        leftAction={{ label: 'Cancel', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
         rightAction={{ label: 'Save', onPress: handleSave }}
         rightDisabled={!canSave}
       />
