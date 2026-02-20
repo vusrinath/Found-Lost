@@ -1,15 +1,19 @@
 {
   "expo": {
-    "name": "whatsinthebox",
-    "slug": "whatsinthebox",
+    "name": "The Box Scan",
+    "slug": "theboxscan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "whatsinthebox",
+    "scheme": "theboxscan",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.srinathvunnava.theboxscan",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +23,18 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO"
+      ],
+      "package": "com.srinathvunnava.theboxscan"
     },
     "web": {
       "output": "static",
@@ -27,6 +42,25 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow BoxTrack to access your camera to scan QR codes."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow BoxTrack to access your photos to add item images."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow BoxTrack to save QR codes to your photo library.",
+          "savePhotosPermission": "Allow BoxTrack to save QR codes to your photo library."
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -43,6 +77,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "eb816334-784a-4ae2-b3a3-cfecdec230d3"
+      }
     }
   }
 }

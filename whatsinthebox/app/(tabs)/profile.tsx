@@ -1,0 +1,170 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { NavBar, SettingsRow, Button, TabBar } from '@/components'; 
+import { useBoxContext } from '@/context/BoxContext';
+
+export default function ProfileScreen() {
+  const router = useRouter();
+  const { boxes, items, deleteBox, deleteItem } = useBoxContext();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [lastBackup, setLastBackup] = useState<Date | null>(null);
+  const [backupText, setBackupText] = useState('Never');
+
+  useEffect(() => {
+    if (!lastBackup) return;
+    const updateBackupText = () => {
+      const now = Date.now();
+      const diff = now - lastBackup.getTime();
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (minutes < 1) setBackupText('Just now');
+      else if (minutes < 60) setBackupText(`${minutes} minute${minutes > 1 ? 's' : ''} ago`);
+      else if (hours < 24) setBackupText(`${hours} hour${hours > 1 ? 's' : ''} ago`);
+      else setBackupText(`${days} day${days > 1 ? 's' : ''} ago`);
+    };
+    updateBackupText();
+    const interval = setInterval(updateBackupText, 60000);
+    return () => clearInterval(interval);
+  }, [lastBackup]);
+
+  const handleCloudBackup = () => {
+    Alert.alert(
+      'Cloud Backup',
+      'Backup your data to the cloud?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Backup Now',
+          onPress: () => {
+            setLastBackup(new Date());
+            Alert.alert('Success', 'Data backed up successfully');
+          }
+        }
+      ]
+    );
+  };
+
+  const handleNotifications = () => {
+    Alert.alert(
+      'Notifications',
+      'Enable notifications for reminders and updates?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: notificationsEnabled ? 'Disable' : 'Enable',
+          onPress: () => {
+            setNotificationsEnabled(!notificationsEnabled);
+            Alert.alert('Success', `Notifications ${!notificationsEnabled ? 'enabled' : 'disabled'}`);
+          }
+        }
+      ]
+    );
+  };
+
+  const handleDeleteAll = () => {
+    Alert.alert(
+      'Delete All Data',
+      'This will permanently delete all boxes and items. Are you sure?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Delete',
+          style: 'destructive', 
+          onPress: async () => {
+            try {
+              [...boxes].forEach(box => deleteBox(box.id));
+              Alert.alert('Success', 'All data has been deleted');
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete data. Please try again.');
+            }
+          }
+        },
+      ]
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <NavBar
+        title="Settings"
+        leftAction={{ label: '← Back', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') }}
+      />
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <Text style={styles.section}>ACCOUNT</Text>
+        <SettingsRow
+          icon="☁️"
+          title="Cloud Backup"
+          subtitle={`Last backup: ${backupText}`}
+          onPress={handleCloudBackup}
+        />
+
+       <SettingsRow
+          icon="🔔"
+          title="Notifications"
+          onPress={handleNotifications}
+        /> 
+        
+        {/* Dark Toggle TODO next release */}
+        {/* <Text style={styles.section}>APP SETTINGS</Text>
+        <SettingsRow
+          icon="🌙"
+          title="Dark Mode"
+          value={false}
+          onValueChange={() => {}}
+        />
+        <SettingsRow
+          icon="🔔"
+          title="Notifications"
+          onPress={handleNotifications}
+        /> */}
+
+        <Text style={styles.section}>DATA</Text>
+        <SettingsRow
+          icon="📤"
+          title="Export Data"
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
+        />
+        <SettingsRow
+          icon="📥"
+          title="Import Data"
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
+        />
+        <SettingsRow
+          icon="👥"
+          title="Family Sharing"
+          onPress={() => Alert.alert('Pro Feature', 'This feature is only available in pro version')}
+        />
+
+        <Button
+          title="🗑️ Delete All Data"
+          onPress={handleDeleteAll}
+          variant="danger"
+          style={styles.deleteButton}
+        />
+      </ScrollView>
+      <TabBar activeTab="profile" onTabChange={(tab) => {
+        if (tab === 'boxes') router.replace('/(tabs)');
+        else if (tab === 'scan') router.push('/scan-modal');
+        else if (tab === 'stats') router.push('/(tabs)/stats');
+      }} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
+  scroll: { flex: 1 },
+  content: { padding: 20, paddingBottom: 100 },
+  section: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#999',
+    marginTop: 24,
+    marginBottom: 10,
+    letterSpacing: 0.5,
+  },
+  deleteButton: { marginTop: 40 },
+});
